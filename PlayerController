@@ -1,0 +1,57 @@
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    public float moveSpeed = 5f; // Gemi hızı
+    public GameObject leftCannon; // Sol taraftan ateş etmek için
+    public GameObject rightCannon; // Sağ taraftan ateş etmek için
+    public GameObject pauseMenu; // Pause menüsü
+
+    private bool isPaused = false;
+
+    void Update()
+    {
+        HandleMovement();
+        HandleShooting();
+        HandlePause();
+    }
+
+    void HandleMovement()
+    {
+        if (Input.GetMouseButton(0)) // Sol mouse tuşu basılıysa
+        {
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePosition.z = transform.position.z; // Z eksenini sabit tut
+            transform.position = Vector3.MoveTowards(transform.position, mousePosition, moveSpeed * Time.deltaTime);
+        }
+    }
+
+    void HandleShooting()
+    {
+        if (Input.GetKeyDown(KeyCode.A)) // A tuşuna basıldığında
+        {
+            FireCannon(leftCannon);
+        }
+
+        if (Input.GetKeyDown(KeyCode.D)) // D tuşuna basıldığında
+        {
+            FireCannon(rightCannon);
+        }
+    }
+
+    void FireCannon(GameObject cannon)
+    {
+        // Burada ateş etme mekaniğini ekle (örneğin, mermiyi instantiate etmek)
+        Debug.Log("Ateş edildi: " + cannon.name);
+    }
+
+    void HandlePause()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) // ESC tuşuna basıldığında
+        {
+            isPaused = !isPaused;
+            pauseMenu.SetActive(isPaused); // Pause menüsünü aç/kapat
+            Time.timeScale = isPaused ? 0 : 1; // Oyun hızını durdur/devam ettir
+        }
+    }
+}
